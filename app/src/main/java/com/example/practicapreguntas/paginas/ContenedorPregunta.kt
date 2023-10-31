@@ -32,8 +32,10 @@ import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 fun ContenedorPregunta(
     navController: NavHostController?,
 ) {
-    var lista = arrayListOf(Pregunta("hola",R.drawable.mario_porro,true,false),
-        Pregunta("adios",R.drawable.mario_porro,true,false))
+    var lista = arrayListOf(
+        Pregunta("hola", R.drawable.mario_porro, true, false),
+        Pregunta("adios", R.drawable.mario_porro, true, false)
+    )
 
     var pregunta by remember { mutableStateOf(lista.get(0)) }
 
@@ -41,7 +43,6 @@ fun ContenedorPregunta(
     var colorTextoResultado by remember {
         mutableStateOf(Color.White) // TODO poner color definido en res
     }
-
 
 
     fun boolAString(b: Boolean): String {
@@ -61,7 +62,7 @@ fun ContenedorPregunta(
                 colorTextoResultado = Color.Red
             }
         }
-       pregunta.haRespondido = true
+        pregunta.haRespondido = true
     }
 
     Column() {
@@ -113,7 +114,13 @@ fun ContenedorPregunta(
 
             // siguiente
             Button(
-                onClick = { pregunta = lista.get(lista.indexOf(pregunta) + 1)},
+                onClick = {
+                    if (lista.indexOf(pregunta) != lista.lastIndexOf(pregunta)) {
+                        pregunta = lista[lista.indexOf(pregunta) + 1]
+                    } else {
+                        // TODO navegar a la pagina del final
+                    }
+                },
                 Modifier.weight(1f),
             ) {
                 Icon(
