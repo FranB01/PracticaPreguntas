@@ -1,5 +1,8 @@
 package com.example.practicapreguntas.paginas
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.practicapreguntas.R
+import com.example.practicapreguntas.pregunta.ListaPreguntas
 import com.example.practicapreguntas.pregunta.Pregunta
 import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 
@@ -33,10 +37,14 @@ import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 fun ContenedorPregunta(
     navController: NavHostController?,
 ) {
+    /*
     var lista = arrayListOf(
+
         Pregunta("hola", R.drawable.mario_porro, true, false),
         Pregunta("adios", R.drawable.mario_porro, true, false)
     )
+    */
+    var lista = ListaPreguntas.cargarPreguntas()
 
     var pregunta by remember { mutableStateOf(lista.get(0)) }
 
@@ -116,7 +124,9 @@ fun ContenedorPregunta(
             // siguiente
             Button(
                 onClick = {
-                    if (lista.indexOf(pregunta) != lista.lastIndexOf(pregunta)) {
+                    Log.i("info","Pregunta ${lista.indexOf(pregunta)} de ${lista.size}")
+
+                    if (lista.indexOf(pregunta) != (lista.size - 1)) {
                         pregunta = lista[lista.indexOf(pregunta) + 1]
                     } else {
                         // TODO navegar a la pagina del final
