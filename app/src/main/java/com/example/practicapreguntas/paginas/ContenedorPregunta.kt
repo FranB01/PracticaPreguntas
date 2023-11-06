@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -39,11 +40,11 @@ fun ContenedorPregunta(
 ) {
     /*
     var lista = arrayListOf(
-
         Pregunta("hola", R.drawable.mario_porro, true, false),
         Pregunta("adios", R.drawable.mario_porro, true, false)
     )
     */
+
     var lista = ListaPreguntas.cargarPreguntas()
 
     var pregunta by remember { mutableStateOf(lista.get(0)) }
@@ -74,7 +75,7 @@ fun ContenedorPregunta(
         pregunta.haRespondido = true
     }
 
-    Column() {
+    Column(Modifier.fillMaxSize()) {
         Text(
             pregunta.texto, Modifier
                 .fillMaxWidth()
@@ -85,6 +86,8 @@ fun ContenedorPregunta(
             contentDescription = null,
             Modifier.fillMaxWidth()
         )
+
+        Text(text = resultado)
 
         // botones true false
         Row(Modifier.fillMaxWidth()) {
@@ -112,7 +115,14 @@ fun ContenedorPregunta(
         Row(Modifier.fillMaxWidth()) {
             // anterior
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    if (lista.indexOf(pregunta) != 0) {
+                        pregunta = lista[lista.indexOf(pregunta) - 1]
+                        resultado = ""
+                    } else {
+                        // TODO navegar a HOME
+                    }
+                },
                 Modifier.weight(1f)
             ) {
                 Icon(
@@ -124,10 +134,11 @@ fun ContenedorPregunta(
             // siguiente
             Button(
                 onClick = {
-                    Log.i("info","Pregunta ${lista.indexOf(pregunta)} de ${lista.size}")
+                    //Log.i("info","Pregunta ${lista.indexOf(pregunta)} de ${lista.size}")
 
                     if (lista.indexOf(pregunta) != (lista.size - 1)) {
                         pregunta = lista[lista.indexOf(pregunta) + 1]
+                        resultado = ""
                     } else {
                         // TODO navegar a la pagina del final
                     }
@@ -141,7 +152,6 @@ fun ContenedorPregunta(
             }
 
         }
-        Text(text = resultado)
     }
 
 
