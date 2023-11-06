@@ -9,10 +9,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.practicapreguntas.paginas.ContenedorPregunta
-import com.example.practicapreguntas.paginas.Pregunta
 import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 
 class MainActivity : ComponentActivity() {
