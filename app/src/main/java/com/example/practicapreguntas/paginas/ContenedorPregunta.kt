@@ -4,10 +4,12 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
@@ -24,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.practicapreguntas.R
@@ -75,10 +78,13 @@ fun ContenedorPregunta(
         pregunta.haRespondido = true
     }
 
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
         Text(
             pregunta.texto, Modifier
                 .fillMaxWidth()
+                .padding(5.dp)
         )
 
         Image(
@@ -89,66 +95,70 @@ fun ContenedorPregunta(
 
         Text(text = resultado)
 
-        // botones true false
-        Row(Modifier.fillMaxWidth()) {
-            // FALSE
-            Button(
-                onClick = { checkResultado(false) },
-                Modifier.weight(1f),
-                shape = RectangleShape
+        // BOTONES
+        Column() {
+            // botones true false
+            Row(Modifier.fillMaxWidth()) {
+                // FALSE
+                Button(
+                    onClick = { checkResultado(false) },
+                    Modifier.weight(1f),
+                    shape = RectangleShape
 
-            ) {
-                Text(text = "wtf no \uD83D\uDC4E") // &#128078
-            }
-            // TRUE
-            Button(
-                onClick = { checkResultado(true) },
-                Modifier.weight(1f),
-                shape = RectangleShape
+                ) {
+                    Text(text = "wtf no \uD83D\uDC4E") // &#128078
+                }
+                // TRUE
+                Button(
+                    onClick = { checkResultado(true) },
+                    Modifier.weight(1f),
+                    shape = RectangleShape
 
-            ) {
-                Text(text = "factores \uD83D\uDC4D") // &#128077
-            }
-        }
-
-        // botones anterior siguiente
-        Row(Modifier.fillMaxWidth()) {
-            // anterior
-            Button(
-                onClick = {
-                    if (lista.indexOf(pregunta) != 0) {
-                        pregunta = lista[lista.indexOf(pregunta) - 1]
-                        resultado = ""
-                    } else {
-                        // TODO navegar a HOME
-                    }
-                },
-                Modifier.weight(1f)
-            ) {
-                Icon(
-                    Icons.Rounded.ArrowBack,
-                    contentDescription = "Anterior"
-                )
+                ) {
+                    Text(text = "factores \uD83D\uDC4D") // &#128077
+                }
             }
 
-            // siguiente
-            Button(
-                onClick = {
-                    //Log.i("info","Pregunta ${lista.indexOf(pregunta)} de ${lista.size}")
+            // botones anterior siguiente
+            Row(Modifier.fillMaxWidth()) {
+                // anterior
+                Button(
+                    onClick = {
+                        if (lista.indexOf(pregunta) != 0) {
+                            pregunta = lista[lista.indexOf(pregunta) - 1]
+                            resultado = ""
+                        } else {
+                            // TODO navegar a HOME
+                        }
+                    },
+                    Modifier.weight(1f)
+                ) {
+                    Icon(
+                        Icons.Rounded.ArrowBack,
+                        contentDescription = "Anterior"
+                    )
+                }
 
-                    if (lista.indexOf(pregunta) != (lista.size - 1)) {
-                        pregunta = lista[lista.indexOf(pregunta) + 1]
-                        resultado = ""
-                    } else {
-                        // TODO navegar a la pagina del final
-                    }
-                },
-                Modifier.weight(1f),
-            ) {
-                Icon(
-                    Icons.Rounded.ArrowForward,
-                    contentDescription = "Siguiente"
-                )
+                // siguiente
+                Button(
+                    onClick = {
+                        //Log.i("info","Pregunta ${lista.indexOf(pregunta)} de ${lista.size}")
+
+                        if (lista.indexOf(pregunta) != (lista.size - 1)) {
+                            pregunta = lista[lista.indexOf(pregunta) + 1]
+                            resultado = ""
+                        } else {
+                            // TODO navegar a la pagina del final
+                        }
+                    },
+                    Modifier.weight(1f),
+                ) {
+                    Icon(
+                        Icons.Rounded.ArrowForward,
+                        contentDescription = "Siguiente"
+                    )
+                }
+
             }
 
         }
