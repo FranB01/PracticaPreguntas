@@ -6,10 +6,13 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.practicapreguntas.Parametros
+import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 
 @Composable
 fun PaginaHome(navController : NavHostController?){
@@ -26,5 +29,13 @@ fun PaginaHome(navController : NavHostController?){
                 Parametros.modoExamen = it
             })
         }
+    }
+}
+
+@Preview
+@Composable
+fun HomePreview(){
+    PracticaPreguntasTheme {
+        PaginaHome(navController = rememberNavController())
     }
 }
