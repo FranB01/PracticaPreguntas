@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.practicapreguntas.Parametros
 import com.example.practicapreguntas.R
+import com.example.practicapreguntas.nav.Rutas
 import com.example.practicapreguntas.pregunta.ListaPreguntas
 import com.example.practicapreguntas.pregunta.Pregunta
 import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
@@ -56,6 +59,12 @@ fun ContenedorPregunta(
     var colorTextoResultado by remember {
         mutableStateOf(Color.White) // TODO poner color definido en res
     }
+    var colorBotonTrue by remember {
+        mutableStateOf(Color.LightGray) // TODO poner color definido en res
+    }
+    var colorBotonFalse by remember {
+        mutableStateOf(Color.LightGray) // TODO poner color definido en res
+    }
 
 
     fun boolAString(b: Boolean): String {
@@ -73,6 +82,15 @@ fun ContenedorPregunta(
                 resultado = "MAAAL!!!!! pusiste ${boolAString(respuestaUsuario)} " +
                         "pero era ${boolAString(!respuestaUsuario)}!!!!!"
                 colorTextoResultado = Color.Red
+            }
+            // colores botones
+            // si verde, no rojo
+            if (pregunta.respuesta){
+                colorBotonTrue = Color.Green
+                colorBotonFalse = Color.Red
+            } else {
+                colorBotonTrue = Color.Red
+                colorBotonFalse = Color.Green
             }
         }
         pregunta.haRespondido = true
@@ -128,10 +146,12 @@ fun ContenedorPregunta(
                             pregunta = lista[lista.indexOf(pregunta) - 1]
                             resultado = ""
                         } else {
-                            // TODO navegar a HOME
+                            navController?.navigate(Rutas.PantallaHome.ruta)
                         }
                     },
-                    Modifier.weight(1f)
+                    Modifier.weight(1f),
+                    // en modo examen no se puede ir atrás
+                    enabled = !Parametros.modoExamen
                 ) {
                     Icon(
                         Icons.Rounded.ArrowBack,

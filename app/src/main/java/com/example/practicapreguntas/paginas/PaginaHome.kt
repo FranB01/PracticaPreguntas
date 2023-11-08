@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.practicapreguntas.Parametros
+import com.example.practicapreguntas.nav.Rutas
 import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 
 @Composable
@@ -41,8 +42,17 @@ fun PaginaHome(navController : NavHostController?){
             })
         }
 
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Orden aleatorio")
+            Switch(checked = false, onCheckedChange = {
+                Parametros.modoAleatorio = it
+            })
+        }
+
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { navController?.navigate(Rutas.ContenedorPregunta.ruta) },
             modifier = Modifier.fillMaxWidth(),
             shape = RectangleShape
             ) {
