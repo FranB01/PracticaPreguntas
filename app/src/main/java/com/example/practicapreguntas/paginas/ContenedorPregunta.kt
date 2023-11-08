@@ -1,6 +1,8 @@
 package com.example.practicapreguntas.paginas
 
+import android.content.ClipDescription
 import android.content.Context
+import android.content.SyncRequest
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -9,25 +11,34 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.practicapreguntas.Parametros
@@ -85,7 +96,7 @@ fun ContenedorPregunta(
             }
             // colores botones
             // si verde, no rojo
-            if (pregunta.respuesta){
+            if (pregunta.respuesta) {
                 colorBotonTrue = Color.Green
                 colorBotonFalse = Color.Red
             } else {
@@ -96,7 +107,8 @@ fun ContenedorPregunta(
         pregunta.haRespondido = true
     }
 
-    Column(Modifier.fillMaxSize(),
+    Column(
+        Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
@@ -121,18 +133,20 @@ fun ContenedorPregunta(
                 Button(
                     onClick = { checkResultado(false) },
                     Modifier.weight(1f),
-                    shape = RectangleShape
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(containerColor = colorBotonFalse),
 
-                ) {
+                    ) {
                     Text(text = "wtf no \uD83D\uDC4E") // &#128078
                 }
                 // TRUE
                 Button(
                     onClick = { checkResultado(true) },
                     Modifier.weight(1f),
-                    shape = RectangleShape
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(containerColor = colorBotonTrue),
 
-                ) {
+                    ) {
                     Text(text = "factores \uD83D\uDC4D") // &#128077
                 }
             }
@@ -157,6 +171,7 @@ fun ContenedorPregunta(
                         Icons.Rounded.ArrowBack,
                         contentDescription = "Anterior"
                     )
+                    Text(text = "PREV")
                 }
 
                 // siguiente
@@ -173,6 +188,7 @@ fun ContenedorPregunta(
                     },
                     Modifier.weight(1f),
                 ) {
+                    Text(text = "NEXT")
                     Icon(
                         Icons.Rounded.ArrowForward,
                         contentDescription = "Siguiente"
@@ -184,9 +200,7 @@ fun ContenedorPregunta(
         }
     }
 
-
 }
-
 
 @Composable
 @Preview(showBackground = true)
