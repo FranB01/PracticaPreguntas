@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.practicapreguntas.paginas.ContenedorPregunta
+import com.example.practicapreguntas.paginas.PaginaHome
 
 @Composable
 fun ControladorNav(){
@@ -17,7 +18,7 @@ fun ControladorNav(){
     NavHost(navController = navController, startDestination = Rutas.PantallaHome.ruta ){
 
         composable(Rutas.PantallaHome.ruta){
-            /*TODO*/
+            PaginaHome(navController = navController)
         }
 
         composable(Rutas.ContenedorPregunta.ruta){

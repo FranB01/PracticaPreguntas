@@ -1,10 +1,17 @@
 package com.example.practicapreguntas.paginas
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Button
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -16,23 +23,35 @@ import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 
 @Composable
 fun PaginaHome(navController : NavHostController?){
-    Column {
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
         Text(
             text = "QUIZ GAMER",
             fontSize = 30.sp,
             textAlign = TextAlign.Center,
         )
 
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(text = "Modo examen")
             Switch(checked = false, onCheckedChange = {
                 Parametros.modoExamen = it
             })
         }
+
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RectangleShape
+            ) {
+            Text(text = "Empezar")
+        }
     }
 }
 
-@Preview
+@Preview(showSystemUi = false, showBackground = true)
 @Composable
 fun HomePreview(){
     PracticaPreguntasTheme {
