@@ -6,6 +6,7 @@ import android.content.SyncRequest
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -47,6 +49,8 @@ import com.example.practicapreguntas.R
 import com.example.practicapreguntas.nav.Rutas
 import com.example.practicapreguntas.pregunta.ListaPreguntas
 import com.example.practicapreguntas.pregunta.Pregunta
+import com.example.practicapreguntas.ui.theme.Blanco
+import com.example.practicapreguntas.ui.theme.Gris
 import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 import com.example.practicapreguntas.ui.theme.Rojo
 import com.example.practicapreguntas.ui.theme.Verde
@@ -70,13 +74,13 @@ fun ContenedorPregunta(
     var resultado by remember { mutableStateOf("") }
 
     var colorTextoResultado by remember {
-        mutableStateOf(Color.White) // TODO poner color definido en res
+        mutableStateOf(Blanco)
     }
     var colorBotonTrue by remember {
-        mutableStateOf(Color.LightGray) // TODO poner color definido en res
+        mutableStateOf(Gris)
     }
     var colorBotonFalse by remember {
-        mutableStateOf(Color.LightGray) // TODO poner color definido en res
+        mutableStateOf(Gris)
     }
 
     var dialogoVisible by remember { mutableStateOf(false) }
@@ -164,10 +168,12 @@ fun ContenedorPregunta(
                             pregunta = lista[lista.indexOf(pregunta) - 1]
                             resultado = ""
                         } else {
-                            navController?.navigate(Rutas.PantallaHome.ruta)
+                            //navController?.navigate(Rutas.PantallaHome.ruta)
+                            pregunta = lista[lista.size - 1]
                         }
                     },
-                    Modifier.weight(1f),
+                    Modifier.weight(1f)
+                        .padding(4.dp),
                     // en modo examen no se puede ir atrás
                     enabled = !Parametros.modoExamen
                 ) {
@@ -187,10 +193,11 @@ fun ContenedorPregunta(
                             pregunta = lista[lista.indexOf(pregunta) + 1]
                             resultado = ""
                         } else {
-                            // TODO navegar a la pagina del final
+                            pregunta = lista[0]
                         }
                     },
-                    Modifier.weight(1f),
+                    Modifier.weight(1f)
+                        .padding(4.dp),
                 ) {
                     Text(text = "NEXT")
                     Icon(
@@ -199,11 +206,17 @@ fun ContenedorPregunta(
                     )
                 }
 
+
             }
 
+            Button(onClick = { /*TODO final*/ },
+                Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(text = "Enviar")
+                Icon(Icons.Rounded.Done, contentDescription = "Enviar")
+            }
         }
     }
-
 }
 
 @Composable

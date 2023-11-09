@@ -12,3 +12,5 @@ val Pink40 = Color(0xFF7D5260)
 
 val Rojo = Color(0xFFF44336)
 val Verde = Color(0xFF66ff33)
+val Blanco = Color(0xFFffffff)
+val Gris = Color(0xFFd222222)
