@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,6 +48,8 @@ import com.example.practicapreguntas.nav.Rutas
 import com.example.practicapreguntas.pregunta.ListaPreguntas
 import com.example.practicapreguntas.pregunta.Pregunta
 import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
+import com.example.practicapreguntas.ui.theme.Rojo
+import com.example.practicapreguntas.ui.theme.Verde
 
 // PONER UN ELEMENTO COMPOSABLE QUE RENDERIZE T0DO, Y UN ELEMENTO NO COMPOSABLE CON LOS DATOS
 // DE LA PREGUNTA.
@@ -63,10 +66,9 @@ fun ContenedorPregunta(
     */
 
     var lista = ListaPreguntas.cargarPreguntas()
-
     var pregunta by remember { mutableStateOf(lista.get(0)) }
-
     var resultado by remember { mutableStateOf("") }
+
     var colorTextoResultado by remember {
         mutableStateOf(Color.White) // TODO poner color definido en res
     }
@@ -77,31 +79,33 @@ fun ContenedorPregunta(
         mutableStateOf(Color.LightGray) // TODO poner color definido en res
     }
 
+    var dialogoVisible by remember { mutableStateOf(false) }
+    var textoDialogo by remember { mutableStateOf("") }
+    var imagenDialogo by remember { mutableStateOf(R.drawable.sanic) }
 
     fun boolAString(b: Boolean): String {
         if (b) return "verdadero"
         else return "falso"
     }
 
-    // todo colores
     fun checkResultado(respuestaUsuario: Boolean) {
         if (!pregunta.haRespondido) {
             if (pregunta.respuesta == respuestaUsuario) {
                 resultado = "Respuesta correcta :D"
-                colorTextoResultado = Color.Green
+                colorTextoResultado = Verde
             } else {
                 resultado = "MAAAL!!!!! pusiste ${boolAString(respuestaUsuario)} " +
                         "pero era ${boolAString(!respuestaUsuario)}!!!!!"
-                colorTextoResultado = Color.Red
+                colorTextoResultado = Rojo
             }
             // colores botones
             // si verde, no rojo
             if (pregunta.respuesta) {
-                colorBotonTrue = Color.Green
-                colorBotonFalse = Color.Red
+                colorBotonTrue = Verde
+                colorBotonFalse = Rojo
             } else {
-                colorBotonTrue = Color.Red
-                colorBotonFalse = Color.Green
+                colorBotonTrue = Rojo
+                colorBotonFalse = Verde
             }
         }
         pregunta.haRespondido = true
