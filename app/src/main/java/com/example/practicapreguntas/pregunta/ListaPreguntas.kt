@@ -1,6 +1,7 @@
 package com.example.practicapreguntas.pregunta
 
 import com.example.practicapreguntas.R
+import com.example.practicapreguntas.data_classes.Pregunta
 
 class ListaPreguntas() {
     companion object {

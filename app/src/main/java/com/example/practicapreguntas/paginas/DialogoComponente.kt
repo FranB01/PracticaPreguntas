@@ -16,18 +16,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
 @Composable
-fun Dialogo(
-    onDismissRequest: () -> Unit,
-    painter: Painter,
-    imageDescription: String,
+fun DialogoComponente(
     text: String,
+    idImagen : Int,
 ) {
-    Dialog(onDismissRequest = { onDismissRequest() }) {
+    Dialog(onDismissRequest = { /*TODO*/ }) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -41,8 +40,8 @@ fun Dialogo(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
-                    painter = painter,
-                    contentDescription = imageDescription,
+                    painter = painterResource(id = idImagen),
+                    contentDescription = null,
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.height(160.dp)
                 )
@@ -52,7 +51,7 @@ fun Dialogo(
                     textAlign = TextAlign.Center
                 )
                 TextButton(
-                    onClick = { onDismissRequest() },
+                    onClick = { /*TODO*/ },
                     modifier = Modifier.padding(8.dp)
                 ) {
                     Text(text = "Reintentar")

@@ -23,7 +23,9 @@ import com.example.practicapreguntas.nav.Rutas
 import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 
 @Composable
-fun PaginaHome(navController : NavHostController?){
+fun PaginaHome(navController: NavHostController?) {
+
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -33,37 +35,39 @@ fun PaginaHome(navController : NavHostController?){
             textAlign = TextAlign.Center,
         )
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "Modo examen")
-            Switch(checked = false, onCheckedChange = {
-                Parametros.modoExamen = it
-            })
-        }
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Modo examen")
+                Switch(checked = false, onCheckedChange = {
+                    Parametros.modoExamen = it
+                })
+            }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "Orden aleatorio")
-            Switch(checked = false, onCheckedChange = {
-                Parametros.modoAleatorio = it
-            })
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Orden aleatorio")
+                Switch(checked = false, onCheckedChange = {
+                    Parametros.modoAleatorio = it
+                })
+            }
         }
 
         Button(
             onClick = { navController?.navigate(Rutas.ContenedorPregunta.ruta) },
             modifier = Modifier.fillMaxWidth(),
             shape = RectangleShape
-            ) {
+        ) {
             Text(text = "Empezar")
         }
     }
 }
 
-@Preview(showSystemUi = false, showBackground = true)
+@Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun HomePreview(){
+fun HomePreview() {
     PracticaPreguntasTheme {
         PaginaHome(navController = rememberNavController())
     }

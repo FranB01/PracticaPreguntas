@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.practicapreguntas.paginas.ContenedorPregunta
+import com.example.practicapreguntas.paginas.PaginaHome
 import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ContenedorPregunta(
+                    PaginaHome(
                         navController = rememberNavController()
                     )
                 }

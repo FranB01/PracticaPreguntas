@@ -1,4 +1,4 @@
-package com.example.practicapreguntas.pregunta
+package com.example.practicapreguntas.data_classes
 
 data class Pregunta(
     val texto: String,
