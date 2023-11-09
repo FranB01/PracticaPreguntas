@@ -76,6 +76,23 @@ fun ContenedorPregunta(
         else return "falso"
     }
 
+    fun cargarColor(){
+        if (pregunta.haRespondido){
+            // colores botones
+            // si verde, no rojo
+            if (pregunta.respuesta) {
+                colorBotonTrue = Verde
+                colorBotonFalse = Rojo
+            } else {
+                colorBotonTrue = Rojo
+                colorBotonFalse = Verde
+            }
+        } else {
+            colorBotonTrue = Gris
+            colorBotonFalse = Gris
+        }
+    }
+
     fun checkResultado(respuestaUsuario: Boolean) {
         if (!pregunta.haRespondido) {
             if (pregunta.respuesta == respuestaUsuario) {
@@ -86,17 +103,9 @@ fun ContenedorPregunta(
                         "pero era ${boolAString(!respuestaUsuario)}!!!!!"
                 colorTextoResultado = Rojo
             }
-            // colores botones
-            // si verde, no rojo
-            if (pregunta.respuesta) {
-                colorBotonTrue = Verde
-                colorBotonFalse = Rojo
-            } else {
-                colorBotonTrue = Rojo
-                colorBotonFalse = Verde
-            }
         }
         pregunta.haRespondido = true
+        cargarColor()
     }
 
     Column(
@@ -152,9 +161,9 @@ fun ContenedorPregunta(
                             pregunta = lista[lista.indexOf(pregunta) - 1]
                             resultado = ""
                         } else {
-                            //navController?.navigate(Rutas.PantallaHome.ruta)
                             pregunta = lista[lista.size - 1]
                         }
+                        cargarColor()
                     },
                     Modifier
                         .weight(1f)
@@ -182,6 +191,7 @@ fun ContenedorPregunta(
                         } else {
                             pregunta = lista[0]
                         }
+                        cargarColor()
                     },
                     Modifier
                         .weight(1f)
@@ -205,6 +215,9 @@ fun ContenedorPregunta(
             }
         }
     }
+
+
+
 }
 
 fun enviar(){

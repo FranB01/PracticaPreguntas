@@ -1,5 +1,6 @@
 package com.example.practicapreguntas.listas
 
+import com.example.practicapreguntas.Parametros
 import com.example.practicapreguntas.R
 import com.example.practicapreguntas.data_classes.Pregunta
 
@@ -12,6 +13,10 @@ class ListaPreguntas() {
             lista.add(ListaPreguntas.pregunta3)
             lista.add(ListaPreguntas.pregunta4)
             lista.add(ListaPreguntas.pregunta5)
+
+            if (Parametros.modoAleatorio){
+                lista.shuffle()
+            }
 
             return lista
         }

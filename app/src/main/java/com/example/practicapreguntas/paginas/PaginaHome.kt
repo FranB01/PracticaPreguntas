@@ -1,5 +1,6 @@
 package com.example.practicapreguntas.paginas
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,6 +9,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -25,6 +30,8 @@ import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 @Composable
 fun PaginaHome(navController: NavHostController?) {
 
+    var modoExamen by remember { mutableStateOf(false) }
+    var modoAleatorio by remember { mutableStateOf(false) }
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween
@@ -40,7 +47,8 @@ fun PaginaHome(navController: NavHostController?) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = "Modo examen")
-                Switch(checked = false, onCheckedChange = {
+                Switch(checked = modoExamen, onCheckedChange = {
+                    modoExamen = it
                     Parametros.modoExamen = it
                 })
             }
@@ -49,14 +57,19 @@ fun PaginaHome(navController: NavHostController?) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = "Orden aleatorio")
-                Switch(checked = false, onCheckedChange = {
+                Switch(checked = modoAleatorio, onCheckedChange = {
+                    modoAleatorio = it
                     Parametros.modoAleatorio = it
                 })
             }
         }
 
         Button(
-            onClick = { navController?.navigate(Rutas.ContenedorPregunta.ruta) },
+            onClick = {
+                Log.i("info","Empezando partida. Modo examen: ${Parametros.modoExamen}.\n" +
+                        "Modo random: ${Parametros.modoAleatorio}")
+                navController?.navigate(Rutas.ContenedorPregunta.ruta)
+                      },
             modifier = Modifier.fillMaxWidth(),
             shape = RectangleShape
         ) {
