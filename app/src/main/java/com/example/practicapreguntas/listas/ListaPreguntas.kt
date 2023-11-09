@@ -1,4 +1,4 @@
-package com.example.practicapreguntas.pregunta
+package com.example.practicapreguntas.listas
 
 import com.example.practicapreguntas.R
 import com.example.practicapreguntas.data_classes.Pregunta

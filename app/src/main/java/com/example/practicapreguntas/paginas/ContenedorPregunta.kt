@@ -29,7 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.practicapreguntas.Parametros
-import com.example.practicapreguntas.pregunta.ListaPreguntas
+import com.example.practicapreguntas.R
+import com.example.practicapreguntas.data_classes.Dialogo
+import com.example.practicapreguntas.listas.ListaPreguntas
 import com.example.practicapreguntas.ui.theme.Blanco
 import com.example.practicapreguntas.ui.theme.Gris
 import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
@@ -65,9 +67,9 @@ fun ContenedorPregunta(
     }
 
     var dialogoVisible by remember { mutableStateOf(false) }
-    var dialogo by remember { mutableStateOf(Dialogo(
-
-    )) }
+    var dialogo by remember { mutableStateOf(
+        Dialogo("", R.drawable.mario_porro,)
+    ) }
 
     fun boolAString(b: Boolean): String {
         if (b) return "verdadero"
