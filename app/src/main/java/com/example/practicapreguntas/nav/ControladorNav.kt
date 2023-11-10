@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.practicapreguntas.listas.ListaPreguntas
 import com.example.practicapreguntas.paginas.ContenedorPregunta
 import com.example.practicapreguntas.paginas.PaginaHome
 
@@ -22,6 +23,7 @@ fun ControladorNav(){
         }
 
         composable(Rutas.ContenedorPregunta.ruta){
+            ListaPreguntas.shuffled = false
             ContenedorPregunta(navController = navController)
         }
 

@@ -20,13 +20,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.practicapreguntas.data_classes.Dialogo
 
 @Composable
 fun DialogoComponente(
-    text: String,
-    idImagen : Int,
+    salir : () -> Unit,
+    dialogo: Dialogo,
 ) {
-    Dialog(onDismissRequest = { /*TODO*/ }) {
+    Dialog(onDismissRequest = { salir }) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -40,21 +41,21 @@ fun DialogoComponente(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
-                    painter = painterResource(id = idImagen),
+                    painter = painterResource(id = dialogo.idImagen),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.height(160.dp)
                 )
                 Text(
-                    text = text,
+                    text = dialogo.texto,
                     modifier = Modifier.padding(15.dp),
                     textAlign = TextAlign.Center
                 )
                 TextButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { salir },
                     modifier = Modifier.padding(8.dp)
                 ) {
-                    Text(text = "Reintentar")
+                    Text(text = "¿Reintentar?")
                 }
             }
         }

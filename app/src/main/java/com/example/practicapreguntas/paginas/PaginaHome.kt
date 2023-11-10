@@ -68,6 +68,7 @@ fun PaginaHome(navController: NavHostController?) {
             onClick = {
                 Log.i("info","Empezando partida. Modo examen: ${Parametros.modoExamen}.\n" +
                         "Modo random: ${Parametros.modoAleatorio}")
+                reset()
                 navController?.navigate(Rutas.ContenedorPregunta.ruta)
                       },
             modifier = Modifier.fillMaxWidth(),
@@ -76,6 +77,10 @@ fun PaginaHome(navController: NavHostController?) {
             Text(text = "Empezar")
         }
     }
+}
+
+fun reset(){
+
 }
 
 @Preview(showSystemUi = true, showBackground = true)

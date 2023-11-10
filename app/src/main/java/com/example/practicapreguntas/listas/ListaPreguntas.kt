@@ -6,6 +6,7 @@ import com.example.practicapreguntas.data_classes.Pregunta
 
 class ListaPreguntas() {
     companion object {
+        var shuffled : Boolean = false
         fun cargarPreguntas(): ArrayList<Pregunta> {
             var lista = ArrayList<Pregunta>()
             lista.add(ListaPreguntas.pregunta1)
@@ -14,10 +15,10 @@ class ListaPreguntas() {
             lista.add(ListaPreguntas.pregunta4)
             lista.add(ListaPreguntas.pregunta5)
 
-            if (Parametros.modoAleatorio){
+            if (Parametros.modoAleatorio && !shuffled){
                 lista.shuffle()
+                shuffled = true
             }
-
             return lista
         }
 
