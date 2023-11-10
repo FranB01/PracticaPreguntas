@@ -266,7 +266,127 @@ fun ContenedorPregunta(
 
         // ---------- FIN MODO VERTICAL, INICIO MODO HORIZONTAL -------------
     } else {
+        Row(
+            Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(
+                    pregunta.texto, Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
+                )
 
+                Image(
+                    painter = painterResource(id = pregunta.idImagen),
+                    contentDescription = null,
+                    Modifier.fillMaxWidth()
+                )
+                Text(text = resultado)
+            }
+
+
+            // BOTONES
+            Column() {
+                // botones true false
+                Row(Modifier.fillMaxWidth()) {
+                    // FALSE
+                    Button(
+                        onClick = { checkResultado(false) },
+                        Modifier.weight(1f),
+                        shape = RectangleShape,
+                        colors = ButtonDefaults.buttonColors(containerColor = colorBotonFalse),
+
+                        ) {
+                        Text(text = "wtf no \uD83D\uDC4E") // &#128078
+                    }
+                    // TRUE
+                    Button(
+                        onClick = { checkResultado(true) },
+                        Modifier.weight(1f),
+                        shape = RectangleShape,
+                        colors = ButtonDefaults.buttonColors(containerColor = colorBotonTrue),
+
+                        ) {
+                        Text(text = "factores \uD83D\uDC4D") // &#128077
+                    }
+                }
+
+                // botones anterior siguiente
+                Row(Modifier.fillMaxWidth()) {
+                    // anterior
+                    Button(
+                        onClick = {
+                            if (lista.indexOf(pregunta) != 0) {
+                                pregunta = lista[lista.indexOf(pregunta) - 1]
+                                resultado = ""
+                            } else {
+                                pregunta = lista[lista.size - 1]
+                            }
+                            cargarColor()
+                        },
+                        Modifier
+                            .weight(1f)
+                            .padding(4.dp),
+                        // en modo examen no se puede ir atrás
+                        enabled = !Parametros.modoExamen
+                    ) {
+                        Icon(
+                            Icons.Rounded.ArrowBack,
+                            contentDescription = "Anterior"
+                        )
+                        Text(text = "PREV")
+                    }
+
+                    // siguiente
+                    Button(
+                        onClick = {
+                            //Log.i("info","Pregunta ${lista.indexOf(pregunta)} de ${lista.size}")
+
+                            if (lista.indexOf(pregunta) != (lista.size - 1)) {
+                                pregunta = lista[lista.indexOf(pregunta) + 1]
+                                resultado = ""
+                            } else if (Parametros.modoExamen) {
+                                enviar()
+                            } else {
+                                pregunta = lista[0]
+                            }
+                            cargarColor()
+                        },
+                        Modifier
+                            .weight(1f)
+                            .padding(4.dp),
+                    ) {
+                        Text(text = "NEXT")
+                        Icon(
+                            Icons.Rounded.ArrowForward,
+                            contentDescription = "Siguiente"
+                        )
+                    }
+
+
+                }
+
+                // Enviar, random
+                Row(Modifier.align(Alignment.CenterHorizontally)) {
+                    Button(
+                        onClick = { pregunta = lista.random() },
+                        enabled = !Parametros.modoExamen // el boton se desactiva en modo examen
+                    ) {
+                        Text(text = "Random")
+                        Icon(Icons.Rounded.Refresh, contentDescription = null)
+                    }
+
+                    Button(
+                        onClick = { enviar() },
+
+                        ) {
+                        Text(text = "Enviar")
+                        Icon(Icons.Rounded.Done, contentDescription = null)
+                    }
+                }
+            }
+        }
     }
 
 
