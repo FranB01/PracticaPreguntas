@@ -31,8 +31,8 @@ import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 @Composable
 fun PaginaHome(navController: NavHostController?) {
 
-    var modoExamen by remember { mutableStateOf(false) }
-    var modoAleatorio by remember { mutableStateOf(false) }
+    var modoExamen by remember { mutableStateOf(Parametros.modoExamen) }
+    var modoAleatorio by remember { mutableStateOf(Parametros.modoAleatorio) }
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween
