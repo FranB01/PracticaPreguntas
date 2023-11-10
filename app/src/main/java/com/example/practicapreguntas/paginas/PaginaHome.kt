@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.practicapreguntas.Parametros
+import com.example.practicapreguntas.listas.ListaPreguntas
 import com.example.practicapreguntas.nav.Rutas
 import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 
@@ -79,8 +80,10 @@ fun PaginaHome(navController: NavHostController?) {
     }
 }
 
+// Resetea valores a los predeterminados
 fun reset(){
-
+    Parametros.correctas = 0
+    ListaPreguntas.shuffled = false
 }
 
 @Preview(showSystemUi = true, showBackground = true)
