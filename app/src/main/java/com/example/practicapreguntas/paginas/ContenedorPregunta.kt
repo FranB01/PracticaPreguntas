@@ -1,5 +1,6 @@
 package com.example.practicapreguntas.paginas
 
+import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Done
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -30,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,29 +60,24 @@ import com.example.practicapreguntas.ui.theme.Verde
 fun ContenedorPregunta(
     navController: NavHostController?,
 ) {
-    /*
-    var lista = arrayListOf(
-        Pregunta("hola", R.drawable.mario_porro, true, false),
-        Pregunta("adios", R.drawable.mario_porro, true, false)
-    )
-    */
+    val vertical = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
 
     var lista = rememberSaveable { ListaPreguntas.cargarPreguntas() }
     var pregunta by rememberSaveable { mutableStateOf(lista[0]) }
     var resultado by rememberSaveable { mutableStateOf("") }
 
-    var colorTextoResultado by rememberSaveable{
+    var colorTextoResultado by rememberSaveable {
         mutableStateOf(Blanco)
     }
-    var colorBotonTrue by rememberSaveable{
+    var colorBotonTrue by rememberSaveable {
         mutableStateOf(Gris)
     }
-    var colorBotonFalse by rememberSaveable{
+    var colorBotonFalse by rememberSaveable {
         mutableStateOf(Gris)
     }
 
-    var dialogoVisible by rememberSaveable{ mutableStateOf(false) }
-    var dialogo by rememberSaveable{
+    var dialogoVisible by rememberSaveable { mutableStateOf(false) }
+    var dialogo by rememberSaveable {
         mutableStateOf(
             Dialogo("Si ves esto algo va mal", R.drawable.mario_porro)
         )
@@ -133,122 +131,146 @@ fun ContenedorPregunta(
         dialogoVisible = true
     }
 
-    fun salir(){
+    fun salir() {
         dialogoVisible = false
         navController?.navigate(Rutas.PantallaHome.ruta)
     }
 
+    /*
+        ------------- FIN FUNCIONES -------------
+        ---------- INICIO COMPONENTES -----------
+    */
 
-    Column(
-        Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            pregunta.texto, Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-        )
 
-        Image(
-            painter = painterResource(id = pregunta.idImagen),
-            contentDescription = null,
-            Modifier.fillMaxWidth()
-        )
+    // MODO VERTICAL
+    if (vertical) {
+        Column(
+            Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                pregunta.texto, Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            )
 
-        Text(text = resultado)
+            Image(
+                painter = painterResource(id = pregunta.idImagen),
+                contentDescription = null,
+                Modifier.fillMaxWidth()
+            )
 
-        // BOTONES
-        Column() {
-            // botones true false
-            Row(Modifier.fillMaxWidth()) {
-                // FALSE
-                Button(
-                    onClick = { checkResultado(false) },
-                    Modifier.weight(1f),
-                    shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(containerColor = colorBotonFalse),
+            Text(text = resultado)
 
+            // BOTONES
+            Column() {
+                // botones true false
+                Row(Modifier.fillMaxWidth()) {
+                    // FALSE
+                    Button(
+                        onClick = { checkResultado(false) },
+                        Modifier.weight(1f),
+                        shape = RectangleShape,
+                        colors = ButtonDefaults.buttonColors(containerColor = colorBotonFalse),
+
+                        ) {
+                        Text(text = "wtf no \uD83D\uDC4E") // &#128078
+                    }
+                    // TRUE
+                    Button(
+                        onClick = { checkResultado(true) },
+                        Modifier.weight(1f),
+                        shape = RectangleShape,
+                        colors = ButtonDefaults.buttonColors(containerColor = colorBotonTrue),
+
+                        ) {
+                        Text(text = "factores \uD83D\uDC4D") // &#128077
+                    }
+                }
+
+                // botones anterior siguiente
+                Row(Modifier.fillMaxWidth()) {
+                    // anterior
+                    Button(
+                        onClick = {
+                            if (lista.indexOf(pregunta) != 0) {
+                                pregunta = lista[lista.indexOf(pregunta) - 1]
+                                resultado = ""
+                            } else {
+                                pregunta = lista[lista.size - 1]
+                            }
+                            cargarColor()
+                        },
+                        Modifier
+                            .weight(1f)
+                            .padding(4.dp),
+                        // en modo examen no se puede ir atrás
+                        enabled = !Parametros.modoExamen
                     ) {
-                    Text(text = "wtf no \uD83D\uDC4E") // &#128078
-                }
-                // TRUE
-                Button(
-                    onClick = { checkResultado(true) },
-                    Modifier.weight(1f),
-                    shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(containerColor = colorBotonTrue),
+                        Icon(
+                            Icons.Rounded.ArrowBack,
+                            contentDescription = "Anterior"
+                        )
+                        Text(text = "PREV")
+                    }
 
+                    // siguiente
+                    Button(
+                        onClick = {
+                            //Log.i("info","Pregunta ${lista.indexOf(pregunta)} de ${lista.size}")
+
+                            if (lista.indexOf(pregunta) != (lista.size - 1)) {
+                                pregunta = lista[lista.indexOf(pregunta) + 1]
+                                resultado = ""
+                            } else if (Parametros.modoExamen) {
+                                enviar()
+                            } else {
+                                pregunta = lista[0]
+                            }
+                            cargarColor()
+                        },
+                        Modifier
+                            .weight(1f)
+                            .padding(4.dp),
                     ) {
-                    Text(text = "factores \uD83D\uDC4D") // &#128077
-                }
-            }
+                        Text(text = "NEXT")
+                        Icon(
+                            Icons.Rounded.ArrowForward,
+                            contentDescription = "Siguiente"
+                        )
+                    }
 
-            // botones anterior siguiente
-            Row(Modifier.fillMaxWidth()) {
-                // anterior
-                Button(
-                    onClick = {
-                        if (lista.indexOf(pregunta) != 0) {
-                            pregunta = lista[lista.indexOf(pregunta) - 1]
-                            resultado = ""
-                        } else {
-                            pregunta = lista[lista.size - 1]
-                        }
-                        cargarColor()
-                    },
-                    Modifier
-                        .weight(1f)
-                        .padding(4.dp),
-                    // en modo examen no se puede ir atrás
-                    enabled = !Parametros.modoExamen
-                ) {
-                    Icon(
-                        Icons.Rounded.ArrowBack,
-                        contentDescription = "Anterior"
-                    )
-                    Text(text = "PREV")
+
                 }
 
-                // siguiente
-                Button(
-                    onClick = {
-                        //Log.i("info","Pregunta ${lista.indexOf(pregunta)} de ${lista.size}")
+                // Enviar, random
+                Row(Modifier.align(Alignment.CenterHorizontally)) {
+                    Button(
+                        onClick = { pregunta = lista.random() },
+                        enabled = !Parametros.modoExamen // el boton se desactiva en modo examen
+                    ) {
+                        Text(text = "Random")
+                        Icon(Icons.Rounded.Refresh, contentDescription = null)
+                    }
 
-                        if (lista.indexOf(pregunta) != (lista.size - 1)) {
-                            pregunta = lista[lista.indexOf(pregunta) + 1]
-                            resultado = ""
-                        } else if (Parametros.modoExamen) {
-                            enviar()
-                        } else {
-                            pregunta = lista[0]
-                        }
-                        cargarColor()
-                    },
-                    Modifier
-                        .weight(1f)
-                        .padding(4.dp),
-                ) {
-                    Text(text = "NEXT")
-                    Icon(
-                        Icons.Rounded.ArrowForward,
-                        contentDescription = "Siguiente"
-                    )
+                    Button(
+                        onClick = { enviar() },
+
+                        ) {
+                        Text(text = "Enviar")
+                        Icon(Icons.Rounded.Done, contentDescription = null)
+                    }
                 }
-
-
-            }
-
-            Button(
-                onClick = { enviar() },
-                Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                Text(text = "Enviar")
-                Icon(Icons.Rounded.Done, contentDescription = "Enviar")
             }
         }
+
+        // ---------- FIN MODO VERTICAL, INICIO MODO HORIZONTAL -------------
+    } else {
+
     }
 
-    if (dialogoVisible){
+
+    if (dialogoVisible) {
         /*
         DialogoComponente(salir = {
             dialogoVisible = false
@@ -303,7 +325,7 @@ fun ContenedorPregunta(
 
 
 @Composable
-//@Preview(showBackground = true)
+@Preview(showBackground = true, device = "spec:parent=pixel_5,orientation=landscape")
 fun previewPregunta() {
     PracticaPreguntasTheme {
         ContenedorPregunta(
