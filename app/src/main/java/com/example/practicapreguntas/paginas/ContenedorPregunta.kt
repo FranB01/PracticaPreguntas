@@ -6,10 +6,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -55,8 +57,7 @@ import com.example.practicapreguntas.ui.theme.PracticaPreguntasTheme
 import com.example.practicapreguntas.ui.theme.Rojo
 import com.example.practicapreguntas.ui.theme.Verde
 
-// PONER UN ELEMENTO COMPOSABLE QUE RENDERIZE T0DO, Y UN ELEMENTO NO COMPOSABLE CON LOS DATOS
-// DE LA PREGUNTA.
+
 
 @Composable
 fun ContenedorPregunta(
@@ -64,7 +65,7 @@ fun ContenedorPregunta(
 ) {
     val configuration = LocalConfiguration.current
     //var vertical by remember { mutableStateOf(configuration.orientation == Configuration.ORIENTATION_PORTRAIT) }
-
+    var vertical = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 
     var lista = rememberSaveable { ListaPreguntas.cargarPreguntas() }
     var pregunta by remember { mutableStateOf(lista[0]) }
@@ -140,14 +141,19 @@ fun ContenedorPregunta(
         navController?.navigate(Rutas.PantallaHome.ruta)
     }
 
+    fun reset(){
+        lista = ListaPreguntas.cargarPreguntas()
+    }
+
     /*
         ------------- FIN FUNCIONES -------------
         ---------- INICIO COMPONENTES -----------
     */
 
+    // -------------------VERTICAL----------------------
 
-    // MODO VERTICAL
-        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+    if (vertical) {
+
         Column(
             Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
@@ -158,11 +164,14 @@ fun ContenedorPregunta(
                     .padding(5.dp)
             )
 
+            Log.i("info", "VERTICAL")
             Image(
                 painter = painterResource(id = pregunta.idImagen),
                 contentDescription = null,
                 Modifier.fillMaxWidth()
             )
+
+
 
             Text(text = resultado)
 
@@ -268,15 +277,17 @@ fun ContenedorPregunta(
             }
         }
 
-        // ---------- FIN MODO VERTICAL, INICIO MODO HORIZONTAL -------------
-    } else
-    {
-        Log.i("info", "HORIZONTAL!!!!")
+
+        // -----------------HORIZONTAL--------------------
+
+
+    } else {
+    Log.i("info", "VERTICAL")
         Row(
             Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column {
+            Column(Modifier.weight(1f)){
                 Text(
                     pregunta.texto, Modifier
                         .fillMaxWidth()
@@ -286,11 +297,205 @@ fun ContenedorPregunta(
                 Image(
                     painter = painterResource(id = pregunta.idImagen),
                     contentDescription = null,
+                    Modifier.fillMaxHeight()
+                )
+            }
+            Text(text = resultado)
+
+            // BOTONES
+            Column(Modifier.weight(1f)
+                .fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom) {
+                // botones true false
+                Row(Modifier.fillMaxWidth()) {
+                    // FALSE
+                    Button(
+                        onClick = { checkResultado(false) },
+                        Modifier.weight(1f),
+                        shape = RectangleShape,
+                        colors = ButtonDefaults.buttonColors(containerColor = colorBotonFalse),
+
+                        ) {
+                        Text(text = "wtf no \uD83D\uDC4E") // &#128078
+                    }
+                    // TRUE
+                    Button(
+                        onClick = { checkResultado(true) },
+                        Modifier.weight(1f),
+                        shape = RectangleShape,
+                        colors = ButtonDefaults.buttonColors(containerColor = colorBotonTrue),
+
+                        ) {
+                        Text(text = "factores \uD83D\uDC4D") // &#128077
+                    }
+                }
+
+                // botones anterior siguiente
+                Row(Modifier.fillMaxWidth()) {
+                    // anterior
+                    Button(
+                        onClick = {
+                            if (lista.indexOf(pregunta) != 0) {
+                                pregunta = lista[lista.indexOf(pregunta) - 1]
+                                resultado = ""
+                            } else {
+                                pregunta = lista[lista.size - 1]
+                            }
+                            cargarColor()
+                        },
+                        Modifier
+                            .weight(1f)
+                            .padding(4.dp),
+                        // en modo examen no se puede ir atrás
+                        enabled = !Parametros.modoExamen
+                    ) {
+                        Icon(
+                            Icons.Rounded.ArrowBack,
+                            contentDescription = "Anterior"
+                        )
+                        Text(text = "PREV")
+                    }
+
+                    // siguiente
+                    Button(
+                        onClick = {
+                            //Log.i("info","Pregunta ${lista.indexOf(pregunta)} de ${lista.size}")
+
+                            if (lista.indexOf(pregunta) != (lista.size - 1)) {
+                                pregunta = lista[lista.indexOf(pregunta) + 1]
+                                resultado = ""
+                            } else if (Parametros.modoExamen) {
+                                enviar()
+                            } else {
+                                pregunta = lista[0]
+                            }
+                            cargarColor()
+                        },
+                        Modifier
+                            .weight(1f)
+                            .padding(4.dp),
+                    ) {
+                        Text(text = "NEXT")
+                        Icon(
+                            Icons.Rounded.ArrowForward,
+                            contentDescription = "Siguiente"
+                        )
+                    }
+
+
+                }
+
+                // Enviar, random
+                Row(Modifier.align(Alignment.CenterHorizontally)) {
+                    Button(
+                        onClick = { pregunta = lista.random() },
+                        enabled = !Parametros.modoExamen // el boton se desactiva en modo examen
+                    ) {
+                        Text(text = "Random")
+                        Icon(Icons.Rounded.Refresh, contentDescription = null)
+                    }
+
+                    Button(
+                        onClick = { enviar() },
+
+                        ) {
+                        Text(text = "Enviar")
+                        Icon(Icons.Rounded.Done, contentDescription = null)
+                    }
+                }
+            }
+        }
+    }
+
+    if (dialogoVisible) {
+        /*
+        DialogoComponente(salir = {
+            dialogoVisible = false
+            navController?.navigate(Rutas.PantallaHome.ruta)
+            //salir()
+        },
+            dialogo = dialogo,
+        )
+         */
+        Dialog(onDismissRequest = { salir() }) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(400.dp)
+                    .padding(15.dp),
+                shape = RoundedCornerShape(15.dp)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Image(
+                        painter = painterResource(id = dialogo.idImagen),
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.height(160.dp)
+                    )
+                    Text(
+                        "Nota final\n${Parametros.correctas}/5",
+                        textAlign = TextAlign.Center,
+                        fontSize = 24.sp
+                    )
+                    Text(
+                        text = dialogo.texto,
+                        modifier = Modifier.padding(15.dp),
+                        textAlign = TextAlign.Center
+                    )
+                    TextButton(
+                        onClick = { salir() },
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text(text = "¿Reintentar?")
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+@Preview(showBackground = true, device = "spec:parent=pixel_5,orientation=landscape")
+fun previewPregunta() {
+    PracticaPreguntasTheme {
+        ContenedorPregunta(
+            navController = rememberNavController(),
+        )
+    }
+}
+
+/*Column(
+            Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                pregunta.texto, Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            )
+
+            if (vertical){
+                Log.i("info", "VERTICAL")
+                Image(
+                    painter = painterResource(id = pregunta.idImagen),
+                    contentDescription = null,
                     Modifier.fillMaxWidth()
                 )
-                Text(text = resultado)
+            } else {
+                Log.i("info", "HORIZONTAL")
+                Image(
+                    painter = painterResource(id = pregunta.idImagen),
+                    contentDescription = null,
+                    Modifier.fillMaxSize(.5f)
+                )
             }
 
+            Text(text = resultado)
 
             // BOTONES
             Column() {
@@ -393,70 +598,4 @@ fun ContenedorPregunta(
                 }
             }
         }
-    }
-
-
-    if (dialogoVisible) {
-        /*
-        DialogoComponente(salir = {
-            dialogoVisible = false
-            navController?.navigate(Rutas.PantallaHome.ruta)
-            //salir()
-        },
-            dialogo = dialogo,
-        )
-         */
-        Dialog(onDismissRequest = { salir() }) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(400.dp)
-                    .padding(15.dp),
-                shape = RoundedCornerShape(15.dp)
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(
-                        painter = painterResource(id = dialogo.idImagen),
-                        contentDescription = null,
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.height(160.dp)
-                    )
-                    Text(
-                        "Nota final\n${Parametros.correctas}/5",
-                        textAlign = TextAlign.Center,
-                        fontSize = 24.sp
-                    )
-                    Text(
-                        text = dialogo.texto,
-                        modifier = Modifier.padding(15.dp),
-                        textAlign = TextAlign.Center
-                    )
-                    TextButton(
-                        onClick = { salir() },
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Text(text = "¿Reintentar?")
-                    }
-                }
-            }
-        }
-    }
-
-
-}
-
-
-@Composable
-@Preview(showBackground = true, device = "spec:parent=pixel_5,orientation=landscape")
-fun previewPregunta() {
-    PracticaPreguntasTheme {
-        ContenedorPregunta(
-            navController = rememberNavController(),
-        )
-    }
-}
-
+*/
