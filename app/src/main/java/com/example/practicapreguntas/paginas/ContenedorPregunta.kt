@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,22 +64,22 @@ fun ContenedorPregunta(
     )
     */
 
-    var lista = ListaPreguntas.cargarPreguntas()
-    var pregunta by remember { mutableStateOf(lista[0]) }
-    var resultado by remember { mutableStateOf("") }
+    var lista = rememberSaveable { ListaPreguntas.cargarPreguntas() }
+    var pregunta by rememberSaveable { mutableStateOf(lista[0]) }
+    var resultado by rememberSaveable { mutableStateOf("") }
 
-    var colorTextoResultado by remember {
+    var colorTextoResultado by rememberSaveable{
         mutableStateOf(Blanco)
     }
-    var colorBotonTrue by remember {
+    var colorBotonTrue by rememberSaveable{
         mutableStateOf(Gris)
     }
-    var colorBotonFalse by remember {
+    var colorBotonFalse by rememberSaveable{
         mutableStateOf(Gris)
     }
 
-    var dialogoVisible by remember { mutableStateOf(false) }
-    var dialogo by remember {
+    var dialogoVisible by rememberSaveable{ mutableStateOf(false) }
+    var dialogo by rememberSaveable{
         mutableStateOf(
             Dialogo("Si ves esto algo va mal", R.drawable.mario_porro)
         )

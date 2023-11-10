@@ -4,16 +4,16 @@ import com.example.practicapreguntas.Parametros
 import com.example.practicapreguntas.R
 import com.example.practicapreguntas.data_classes.Pregunta
 
-class ListaPreguntas() {
+class ListaPreguntas {
     companion object {
         var shuffled : Boolean = false
         fun cargarPreguntas(): ArrayList<Pregunta> {
             var lista = ArrayList<Pregunta>()
-            lista.add(ListaPreguntas.pregunta1)
-            lista.add(ListaPreguntas.pregunta2)
-            lista.add(ListaPreguntas.pregunta3)
-            lista.add(ListaPreguntas.pregunta4)
-            lista.add(ListaPreguntas.pregunta5)
+            lista.add(pregunta1)
+            lista.add(pregunta2)
+            lista.add(pregunta3)
+            lista.add(pregunta4)
+            lista.add(pregunta5)
 
             if (Parametros.modoAleatorio && !shuffled){
                 lista.shuffle()
@@ -21,6 +21,7 @@ class ListaPreguntas() {
             }
             return lista
         }
+
 
 
         // todas estas preguntas son 101% objectivas
