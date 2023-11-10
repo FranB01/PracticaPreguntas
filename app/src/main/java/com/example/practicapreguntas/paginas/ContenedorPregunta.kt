@@ -23,11 +23,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -60,24 +62,26 @@ import com.example.practicapreguntas.ui.theme.Verde
 fun ContenedorPregunta(
     navController: NavHostController?,
 ) {
-    val vertical = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
+    val configuration = LocalConfiguration.current
+    //var vertical by remember { mutableStateOf(configuration.orientation == Configuration.ORIENTATION_PORTRAIT) }
+
 
     var lista = rememberSaveable { ListaPreguntas.cargarPreguntas() }
-    var pregunta by rememberSaveable { mutableStateOf(lista[0]) }
+    var pregunta by remember { mutableStateOf(lista[0]) }
     var resultado by rememberSaveable { mutableStateOf("") }
 
-    var colorTextoResultado by rememberSaveable {
+    var colorTextoResultado by remember {
         mutableStateOf(Blanco)
     }
-    var colorBotonTrue by rememberSaveable {
+    var colorBotonTrue by remember {
         mutableStateOf(Gris)
     }
-    var colorBotonFalse by rememberSaveable {
+    var colorBotonFalse by remember {
         mutableStateOf(Gris)
     }
 
     var dialogoVisible by rememberSaveable { mutableStateOf(false) }
-    var dialogo by rememberSaveable {
+    var dialogo by remember {
         mutableStateOf(
             Dialogo("Si ves esto algo va mal", R.drawable.mario_porro)
         )
@@ -143,7 +147,7 @@ fun ContenedorPregunta(
 
 
     // MODO VERTICAL
-    if (vertical) {
+        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
         Column(
             Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
@@ -265,7 +269,9 @@ fun ContenedorPregunta(
         }
 
         // ---------- FIN MODO VERTICAL, INICIO MODO HORIZONTAL -------------
-    } else {
+    } else
+    {
+        Log.i("info", "HORIZONTAL!!!!")
         Row(
             Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -449,7 +455,7 @@ fun ContenedorPregunta(
 fun previewPregunta() {
     PracticaPreguntasTheme {
         ContenedorPregunta(
-            navController = rememberNavController()
+            navController = rememberNavController(),
         )
     }
 }
